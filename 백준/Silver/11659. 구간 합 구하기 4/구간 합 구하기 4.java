@@ -1,22 +1,22 @@
+import java.io.*;
 import java.util.*;
 public class Main {
-    public static void main(String[] args) {
-         Scanner sc = new Scanner(System.in);
-        int dataCount = sc.nextInt();
-        int queryCount = sc.nextInt();
-        int[] data = new int[dataCount];
-        int[] s = new int[dataCount+1];
-        for(int i=0; i<data.length; i++){
-            data[i]=sc.nextInt();
+    public static void main(String[] args) throws Exception{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int numCount = Integer.parseInt(st.nextToken());
+        int queryCount = Integer.parseInt(st.nextToken());
+        int[] sumArray = new int[numCount+1];
+        st = new StringTokenizer(br.readLine());
+        sumArray[0]=0;
+        for(int i=1; i<=numCount;i++){
+            sumArray[i] = sumArray[i-1] + Integer.parseInt(st.nextToken());
         }
-        for (int i=1; i<=data.length; i++) {
-            s[i] = s[i-1] + data[i-1];
-        }
-        for(int a=0; a<queryCount; a++) {
-            int i = sc.nextInt();
-            int j = sc.nextInt();
-            int result = s[j] - s[i-1];
-            System.out.println(result);
+        for(int idx=0; idx<queryCount; idx++){
+            st = new StringTokenizer(br.readLine());
+            int i = Integer.parseInt(st.nextToken());
+            int j = Integer.parseInt(st.nextToken());
+            System.out.println(sumArray[j] - sumArray[i-1]);
         }
     }
 }
