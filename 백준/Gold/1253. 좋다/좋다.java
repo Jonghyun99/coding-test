@@ -2,38 +2,41 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner sc =new Scanner(System.in);
-        int N = sc.nextInt();
+    public static void main(String[] args) throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken());
+
         int[] A = new int[N];
-        for(int i=0; i<N; i++) {
-            A[i] = sc.nextInt();
+        st = new StringTokenizer(br.readLine());
+        for(int i=0; i<N; i++){
+            A[i] = Integer.parseInt(st.nextToken());
         }
         Arrays.sort(A);
         int answer = 0;
-        for(int k = 0; k<N; k++) {
-            int sP = 0;
-            int eP = N-1;
-            long find = A[k];
-            while(sP<eP){
-                if(A[sP] + A[eP] == find) {
-                    if(sP != k && eP != k) {
+        for(int k=0; k<N; k++){
+            int find = A[k];
+            int i = 0;
+            int j = N-1;
+            while(i<j) {
+                if(A[i] + A[j] == find) {
+                    if(i != k && j != k) {
                         answer++;
                         break;
-                    } else if(sP==k){
-                        sP++;
-                    } else if(eP==k){
-                        eP--;
+                    } else if(i==k) {
+                        i++;
+                    } else if(j==k){
+                        j--;
                     }
-                } else if(A[sP] + A[eP] > find) {
-                    eP--;
+                } else if(A[i] + A[j] > find) {
+                    j--;
                 } else {
-                    sP++;
+                    i++;
                 }
             }
         }
         System.out.println(answer);
-        
+
     }
        
 }
