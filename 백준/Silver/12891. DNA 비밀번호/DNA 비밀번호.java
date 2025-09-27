@@ -1,16 +1,16 @@
-
 import java.util.*;
 import java.io.*;
 
 public class Main {
+    private static final int IDX_A = 0;
+    private static final int IDX_C = 1;
+    private static final int IDX_G = 2;
+    private static final int IDX_T = 3;
 
-    static int IDX_A = 0;
-    static int IDX_C = 1;
-    static int IDX_G = 2;
-    static int IDX_T = 3;
-    
-    static int[] currentArry = new int[4];
-    static int[] checkArray = new int[4];
+    private static int secretCount = 0;
+
+    static final int[] currentArray = new int[4];
+    static final int[] checkArray = new int[4];
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -19,52 +19,34 @@ public class Main {
         int S = Integer.parseInt(st.nextToken()); // 문자열 길이
         int P = Integer.parseInt(st.nextToken()); // 부분문자열 길이
 
-        char[] A = new char[S];
-        A = br.readLine().toCharArray();    // 문자열 배열
-
-        int secretCount = 0;
+        char[] A = br.readLine().toCharArray();
+        
         st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < 4; i++) {
+        for(int i=0; i<4; i++){
             checkArray[i] = Integer.parseInt(st.nextToken());
-            if(checkArray[i] == 0)  secretCount++;
+            if(checkArray[i] == 0) secretCount++;
         }
 
+        for(int i=0; i<P; i++){
+            add(A[i]);
+        }
+        
         int answer = 0;
-        for (int i = 0; i < P; i++) {
-            int idx = charToIdx(A[i]);
-            if(idx != -1) {
-                currentArry[idx]++;
-                if(currentArry[idx]==checkArray[idx]) {
-                    secretCount++;
-                }
-            }
-        }
-        if(secretCount == 4) {
-            answer++;
-        }
+        if(secretCount==4) answer++;
+        
+        for(int i=P; i<S; i++){
+            int j=i-P;
+            
+            add(A[i]);
+            remove(A[j]);
 
-        for (int i = P; i<S; i++){
-            int j = i-P;
-            int start = charToIdx(A[j]);
-            int end = charToIdx(A[i]);
-            if(end != -1) {
-                currentArry[end]++;
-                if(currentArry[end] == checkArray[end]){
-                    secretCount++;
-                }
-            }
-            if(start != -1){
-                if(currentArry[start] == checkArray[start]){
-                    secretCount--;
-                }
-                currentArry[start]--;
-            }
             if(secretCount==4) answer++;
         }
         System.out.println(answer);
+
     }
 
-    static private int charToIdx(char c) {
+    private static int charToIndex(char c){
         switch (c) {
             case 'A':
                 return IDX_A;
@@ -76,6 +58,25 @@ public class Main {
                 return IDX_T;
             default:
                 return -1;
+        }
+    }
+
+    static private void add(char c) {
+        int idx = charToIndex(c);
+        if(idx!=-1) {
+            currentArray[idx]++;
+            if(currentArray[idx]==checkArray[idx]) {
+                secretCount++;
+            }
+        }
+    }
+    static private void remove(char c) {
+        int idx = charToIndex(c);
+        if(idx!=-1) {
+            if(currentArray[idx]==checkArray[idx]) {
+                secretCount--;
+            }
+            currentArray[idx]--;
         }
     }
 
