@@ -8,15 +8,14 @@ public class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
         int L = Integer.parseInt(st.nextToken());
-         st = new StringTokenizer(br.readLine());
-        Deque<Node> myDeque = new LinkedList<>();
-        for(int i = 0; i<N; i++) {
+        st = new StringTokenizer(br.readLine());
+        Deque<Node> myDeque = new ArrayDeque<>();
+        for(int i=0; i<N; i++){
             int now = Integer.parseInt(st.nextToken());
-            while(!myDeque.isEmpty() && myDeque.getLast().value > now) {
+            while(!myDeque.isEmpty() && myDeque.getLast().value >= now) {
                 myDeque.removeLast();
             }
-            myDeque.addLast(new Node(now, i));
-
+            myDeque.add(new Node(now,i));
             if(myDeque.getFirst().index <= i - L) {
                 myDeque.removeFirst();
             }
@@ -24,16 +23,18 @@ public class Main {
         }
         bw.flush();
         bw.close();
+
     }
 
-    static class Node {
-        public int value;
-        public int index;
+    public static class Node {
+        int value;
+        int index;
 
         Node(int value, int index) {
             this.value = value;
             this.index = index;
         }
+        
     }
 
 }
