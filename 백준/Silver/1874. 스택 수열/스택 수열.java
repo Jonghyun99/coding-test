@@ -9,23 +9,22 @@ public class Main {
         for(int i=0; i<N; i++) {
             A[i] = Integer.parseInt(br.readLine());
         }
-
         Stack<Integer> stack = new Stack<>();
         StringBuffer sb = new StringBuffer();
-        int num = 1;
+
+        int currentNum = 1;
         boolean result = true;
-        for(int i = 0; i< N; i++) {
-            int currentNum = A[i];
-            if(currentNum >= num) {
-                while(currentNum >= num) {
-                    stack.push(num++);
+        for(int i=0; i<A.length; i++) {
+            if(A[i] >= currentNum) {
+                while(A[i] >= currentNum) {
+                    stack.push(currentNum++);
                     sb.append("+\n");
                 }
                 stack.pop();
                 sb.append("-\n");
             } else {
                 int n = stack.pop();
-                if(n>currentNum) {
+                if(n > A[i]) {
                     System.out.println("NO");
                     result = false;
                     break;
@@ -34,7 +33,8 @@ public class Main {
                 }
             }
         }
-        if(result) System.out.println(sb.toString());
+        if (result) System.out.println(sb.toString());
+       
 
     }
 
