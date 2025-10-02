@@ -19,9 +19,11 @@ public class Main {
             int num = Integer.parseInt(br.readLine());
             if(num==0){
                 if(queue.isEmpty()) {
-                    System.out.println(0);
+                    sb.append(0);
+                    sb.append("\n");
                 } else {
-                    System.out.println(queue.poll());
+                    sb.append(queue.poll());
+                    sb.append("\n");
                 }
             } else {
                 queue.offer(num);
