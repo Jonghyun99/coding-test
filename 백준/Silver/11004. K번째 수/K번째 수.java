@@ -17,43 +17,45 @@ public class Main {
             A[i] = Integer.parseInt(st.nextToken());
         }
         quickSort(A, 0, N-1, K-1);
+        // for(int i=0; i<N; i++){
+        //     System.out.print(A[i]);
+        // }
+        // System.out.println();
         System.out.println(A[K-1]);
     }
 
     public static void quickSort(int[] A, int start, int end, int k){
-        if(start<end){
-            int pivot = partition(A, start, end);
-            if(pivot == k) {
-                return;
-            } else if (k < pivot) {
-                quickSort(A, start, pivot-1,k);
-            } else {
-                quickSort(A, pivot+1, end,k);
-            }
+        int pivot = partition(A, start, end);
+
+        if(pivot==k){
+            return;
+        } else if(k < pivot) {
+            quickSort(A, start, pivot-1, k);
+        } else {
+            quickSort(A, pivot+1, end, k);
         }
     }
 
     public static int partition(int[] A, int s, int e){
-        if(s+1 == e) {
-            if(A[s] > A[e]) swap(A,s,e);
+        if(s+1==e){
+            if(A[s]>A[e]){
+                swap(A, s, e);
+            }
             return e;
         }
-
         int m = (s+e)/2;
         swap(A, s, m);
         int pivot = A[s];
-        int i = s+1;
-        int j = e;
-
+        int i=s+1, j=e;
         while(i<=j){
-            while(j >= s+1 && pivot<A[j]) {
+            while(j>=s && A[j]>pivot) {
                 j--;
             }
-            while(i<=e && pivot>A[i]) {
+            while(i<=e && A[i]<pivot) {
                 i++;
             }
             if(i<=j){
-                swap(A,i++,j--);
+                swap(A, i++, j--);
             }
         }
         A[s] = A[j];
