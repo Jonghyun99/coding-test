@@ -1,75 +1,68 @@
-import java.util.*;
+
 import java.io.*;
+import java.util.StringTokenizer;
 
-public class Main {
-
-  
-
-    
-    public static void main(String[] args) throws IOException{
+public class Main{
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         int N = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
-        st = new StringTokenizer(br.readLine());
         int[] A = new int[N];
+        st = new StringTokenizer(br.readLine());
         for(int i=0; i<N; i++){
             A[i] = Integer.parseInt(st.nextToken());
         }
+
         quickSort(A, 0, N-1, K-1);
-        // for(int i=0; i<N; i++){
-        //     System.out.print(A[i]);
-        // }
-        // System.out.println();
         System.out.println(A[K-1]);
+
     }
 
-    public static void quickSort(int[] A, int start, int end, int k){
-        int pivot = partition(A, start, end);
+    public static void quickSort(int[] A, int S, int E, int K) {
+        if(S<E) {
+            int pivot = partition(A, S, E);
 
-        if(pivot==k){
-            return;
-        } else if(k < pivot) {
-            quickSort(A, start, pivot-1, k);
-        } else {
-            quickSort(A, pivot+1, end, k);
-        }
-    }
-
-    public static int partition(int[] A, int s, int e){
-        if(s+1==e){
-            if(A[s]>A[e]){
-                swap(A, s, e);
+            if(K==pivot) {
+                return;
+            } else if(K>pivot) {
+                quickSort(A, pivot+1, E,K);
+            } else {
+                quickSort(A, S, pivot-1,K);
             }
-            return e;
         }
-        int m = (s+e)/2;
-        swap(A, s, m);
-        int pivot = A[s];
-        int i=s+1, j=e;
+    }
+    
+    public static int partition(int[] A, int S, int E) {
+        if(S+1==E){
+            if(A[S]>A[E]) swap(A, S, E);
+            return E;
+        }
+
+        int M = (S+E)/2;
+        int pivot = A[M];
+        swap(A, S, M);
+        int i=S+1, j=E;
         while(i<=j){
-            while(j>=s && A[j]>pivot) {
+            while(j>=S+1 && A[j]>pivot){
                 j--;
             }
-            while(i<=e && A[i]<pivot) {
+            while(i<=E && A[i]<pivot){
                 i++;
             }
+
             if(i<=j){
-                swap(A, i++, j--);
+                swap(A,i++,j--);
             }
         }
-        A[s] = A[j];
+        A[S] = A[j];
         A[j] = pivot;
         return j;
     }
-       
-    public static void swap(int[] A, int i, int j) {
+
+    public static void swap(int[] A, int i, int j){
         int temp = A[i];
         A[i] = A[j];
         A[j] = temp;
     }
-
-       
-
 }
-
