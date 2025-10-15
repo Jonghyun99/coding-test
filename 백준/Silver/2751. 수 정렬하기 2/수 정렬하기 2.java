@@ -1,8 +1,11 @@
+
 import java.io.*;
 
 public class Main{
 
-    public static int[] A,tmp;
+    static int[] A;
+    static int[] tmp;
+    
     public static void main(String[] args) throws NumberFormatException, IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -22,37 +25,38 @@ public class Main{
     }
 
     private static void merget_sort(int s, int e) {
-        if(e-s<1) return;
-        int m = s+(e-s) / 2;
+        if(e - s < 1) return;
 
+        int m = s+(e-s)/2;
         merget_sort(s, m);
         merget_sort(m+1, e);
         for(int i=s; i<=e; i++){
             tmp[i] = A[i];
         }
-        int k=s;
+        int k = s;
         int index1 = s;
         int index2 = m+1;
-        while(index1<=m && index2 <= e){
+
+        while(index1<=m && index2<=e){
             if(tmp[index1] > tmp[index2]) {
                 A[k] = tmp[index2];
-                k++;
                 index2++;
             } else {
                 A[k] = tmp[index1];
-                k++;
                 index1++;
             }
+            k++;
         }
-        while(index1 <= m){
+        while(index1<=m) {
             A[k] = tmp[index1];
             k++;
             index1++;
         }
-        while(index2 <= e){
+        while(index2<=e) {
             A[k] = tmp[index2];
             k++;
             index2++;
         }
+       
     }
 }
