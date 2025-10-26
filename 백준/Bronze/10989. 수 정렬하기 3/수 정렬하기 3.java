@@ -1,5 +1,3 @@
-
-
 import java.io.*;
 
 public class Main{
@@ -11,41 +9,49 @@ public class Main{
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         int N = Integer.parseInt(br.readLine());
         A = new int[N];
+        int max = Integer.MIN_VALUE;
         for(int i=0; i<N; i++){
             A[i] = Integer.parseInt(br.readLine());
+            if(max<A[i]) max = A[i];
         }
         br.close();
-        radixSort(A, 5);
-        for (int i=0; i<N; i++){
+        radixSort(A, max);
+        for(int i=0; i<A.length; i++){
             bw.write(A[i] + "\n");
         }
         bw.flush();
         bw.close();
-
         
+
     }
 
-    public static void radixSort(int[] A, int maxSize){
+    public static void radixSort(int[] A, int maxNumber){
+        int exp = 1;
         int[] output = new int[A.length];
-        int digit = 1;
-        int count = 0;
-        while (count != maxSize){
-            int[] bucket = new int[10];
-            for(int i = 0; i<A.length; i++){
-                bucket[(A[i] / digit) % 10]++;
+
+
+        while(maxNumber / exp > 0) {
+            int[] count = new int[10];
+            for(int i=0; i<A.length; i++){
+                count[(A[i]/exp) % 10]++;
             }
+
             for(int i=1; i<10; i++){
-                bucket[i] += bucket[i-1];
+                count[i] += count[i-1];
             }
-            for(int  i=A.length -1; i>=0; i--){
-                output[bucket[(A[i]/digit%10)] -1] = A[i];
-                bucket[(A[i] / digit) % 10]--;
+
+            for(int i=A.length-1; i>=0; i--){
+                int digit = (A[i] / exp) % 10;
+                int position = count[digit] - 1;
+                output[position] = A[i];
+                count[digit]--;
+                
             }
             for(int i=0; i<A.length; i++){
                 A[i] = output[i];
             }
-            digit *= 10;
-            count++;
+            exp*=10;
         }
     }
+       
 }
