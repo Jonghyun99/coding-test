@@ -1,53 +1,53 @@
 
-
 import java.io.*;
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.StringTokenizer;
 
 
 
 public class Main{
 
+    static int N,M;
     static boolean[] visited;
-    static int N, M;
     static int[] S;
+    static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
+        
 
-        // 1부터~ N까지의 자연수 
         N = Integer.parseInt(st.nextToken());
-        // 수열 길이
         M = Integer.parseInt(st.nextToken());
-
         visited = new boolean[N];
         S = new int[M];
 
-        backtracking(0);
+        DFS(0);
+        System.out.println(sb.toString());
         
     }
 
-    static void backtracking(int length){
-        if(length==M) {
+    static void DFS(int length){
+        if(length == M){
             for(int i=0; i<M; i++){
-                System.out.print(S[i] + 1 + " ");
+                sb.append(S[i] + 1 + " ");
             }
-            System.out.println();
+            sb.append("\n");
             return;
         }
 
         for(int i=0; i<N; i++){
             if(!visited[i]){
-                visited[i] = true;
+                visited[i]=true;
                 S[length] = i;
-                backtracking(length+1);
-                visited[i] = false;
+                DFS(length+1);
+                visited[i]=false;
             }
         }
-        
+      
     }
+
+
+    
 
  
     
