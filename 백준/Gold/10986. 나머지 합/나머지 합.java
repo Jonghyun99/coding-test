@@ -1,30 +1,37 @@
-import java.util.*;
 import java.io.*;
+import java.util.StringTokenizer;
 
-public class Main {
-    public static void main(String[] args) throws IOException{
-        Scanner sc = new Scanner(System.in);
-        int N =sc.nextInt();
-        int M =sc.nextInt();
-        
-        int[] S = new int[N+1];
-        int[] C = new int[M];
 
-        for(int i=1; i<=N; i++){
-            S[i] = (S[i-1] + sc.nextInt()) % M;
-        }
-        
+public class Main{
+    
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        int N = Integer.parseInt(st.nextToken()); // 숫자의 개수 (1 <= N <= 10^6)
+        int M = Integer.parseInt(st.nextToken()); // 나눌 수 (2 <= M <= 10^3)
+
         long answer = 0;
-        for(int i=1; i<=N; i++){
-            if(S[i]==0) answer++;
-            C[S[i]]++;
+        long[] remainderCounts = new long[M];
+        int currentSum = 0;
+
+        remainderCounts[0] = 1;
+
+        st = new StringTokenizer(br.readLine());
+        for(int i=0; i<N; i++){
+            currentSum = (currentSum + Integer.parseInt(st.nextToken()))%M;
+            remainderCounts[currentSum]++;
         }
 
-        for(int i=0; i<M; i++) {
-            if(C[i]>1){
-                answer += (long)C[i]*(C[i]-1)/2;
+        for(int r=0; r<M; r++){
+            long count = remainderCounts[r];
+            if(count>1) {
+                answer += count * (count-1) / 2;
             }
         }
+
+
         System.out.println(answer);
-    }   
+    }
+
 }
