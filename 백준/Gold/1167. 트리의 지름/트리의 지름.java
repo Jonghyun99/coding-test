@@ -1,70 +1,70 @@
-import java.io.*;
-import java.util.*;
+    import java.util.*;
+    import java.io.*;
 
+class Main{
 
-public class Main{
+    static class Edge{
+        int to;
+        int weight;
 
+        public Edge(int to, int weight){
+            this.to = to;
+            this.weight = weight;
+        }
+    }
+
+    static ArrayList<Edge>[] list;
     static boolean[] visited;
-    static int[] distance;
-    static ArrayList<Edge>[] A;
+    static int maxDist = 0;
+    static int farthestNode = 0;
 
-    public static void main(String[] args) throws IOException {
-        Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt();
-        A = new ArrayList[N+1];
-        for(int i=1; i<=N; i++){
-            A[i] = new ArrayList<>();
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int V = Integer.parseInt(st.nextToken());
+
+        list = new ArrayList[V + 1];
+        for(int i=1; i<=V; i++){
+            list[i] = new ArrayList<>();
         }
-        for(int i=0; i<N; i++){
-            int S = sc.nextInt();
-            while(true) {
-                int E = sc.nextInt();
-                if(E==-1) break;
-                
-                int V = sc.nextInt();
-                A[S].add(new Edge(E,V));
+
+        for(int i=0; i<V; i++){
+            st = new StringTokenizer(br.readLine());
+            int node = Integer.parseInt(st.nextToken());
+
+            while(true){
+                int linkedNode = Integer.parseInt(st.nextToken());
+                if(linkedNode==-1) break;
+
+                int weight = Integer.parseInt(st.nextToken());
+                list[node].add(new Edge(linkedNode, weight));
             }
         }
-        distance = new int[N+1];
-        visited = new boolean[N+1];
-        BFS(1);
-        int Max = 1;
-        for (int i=2; i<=N; i++){
-            if(distance[Max] < distance[i])
-                Max = i;
-        }
-        distance = new int[N+1];
-        visited = new boolean[N+1];
-        BFS(Max);
-        Arrays.sort(distance);
-        System.out.println(distance[N]);
+
+        // 임의 노드에서 가장 먼 노드 찾기
+        visited = new boolean[V+1];
+        dfs(1, 0);        
+
+        visited = new boolean[V+1];
+        maxDist = 0;
+        dfs(farthestNode, 0);
+
+        System.out.println(maxDist);
     }
 
-    static void BFS(int index){
-        Queue<Integer> queue = new LinkedList<>();
-        queue.add(index);
-        visited[index] = true;
-        while(!queue.isEmpty()){
-            int nowNode = queue.poll();
-            for(Edge edge:A[nowNode]){
-                int e = edge.e;
-                int v = edge.value;
-                if(!visited[e]){
-                    visited[e] = true;
-                    queue.add(e);
-                    distance[e] = distance[nowNode] + v;
-                }
+    public static void dfs(int node, int dist){
+        if(dist > maxDist) {
+            maxDist = dist;
+            farthestNode = node;
+        }
+
+        visited[node] = true;
+
+        for(Edge edge:list[node]){
+            if(!visited[edge.to]){
+                dfs(edge.to, dist+edge.weight);
             }
         }
     }
-
-    static class Edge {
-        int e;
-        int value;
-        public Edge(int e, int value) {
-            this.e = e;
-            this.value = value;
-        }
-    }
-        
+    
 }
