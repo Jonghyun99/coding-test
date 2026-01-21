@@ -9,35 +9,36 @@
             int M = Integer.parseInt(st.nextToken());
             
             int[] A = new int[N];
-            st = new StringTokenizer(br.readLine());
 
+            st = new StringTokenizer(br.readLine());
             int start = 0;
             int end = 0;
-
-            for(int i=0; i<N; i++) {
+            for(int i=0; i<N; i++){
                 A[i] = Integer.parseInt(st.nextToken());
-                if(A[i]> start) start = A[i];
+                if(start < A[i]) start = A[i];
                 end += A[i];
             }
 
-            while(start<=end){
-                int middle = (start + end) / 2;
-                int sum = 0;
+            while(start <= end){
                 int count = 0;
+                int sum = 0;
+                int middle = (start+end)/2;
 
                 for(int i=0; i<N; i++){
-                    if(sum+A[i] > middle) {
+                    // 블루레이 용량 최소 값 찾기
+                    if(sum + A[i] > middle) {
                         count++;
                         sum = 0;
                     }
-                    sum+=A[i];
+                    sum += A[i];
                 }
                 if(sum!=0) count++;
-                if(count>M) {
-                    start = middle+1;
-                } else {
+
+                // start가 커지면, middle이 커져서 count 값이 작아짐
+                if(count>M)
+                    start = middle + 1;
+                else 
                     end = middle - 1;
-                }
             }
             System.out.println(start);
         }
