@@ -1,29 +1,28 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException{
-       Scanner sc = new Scanner(System.in);
-       int N = sc.nextInt();
-       int count = 1;
-       int startIndex = 1;
-       int endIndex = 1;
-       int sum = 1;
-       while(endIndex!=N){
-        if(sum==N){
-            count++;
-            endIndex++;
-            sum+=endIndex;
-        } else if(sum>N) {
-            sum-=startIndex;
-            startIndex++;
-        } else {
-            endIndex++;
-            sum+=endIndex;
+    public static void main(String[] args) throws Exception {
+        Scanner sc = new Scanner(System.in);
+        int N = sc.nextInt();
+
+        int count = 1;
+        int start_index = 1;
+        int end_index = 1;
+        long sum = 1;        
+        while(end_index!=N){
+            if(sum == N) {
+                count++;
+                end_index++;
+                sum+=end_index;
+            } else if(sum > N) {
+                sum -= start_index;
+                start_index++;
+            } else {
+                end_index++;
+                sum+=end_index;
+            }
         }
-       }
-       
-       System.out.println(count);
+        System.out.println(count);
     }
-       
 }
