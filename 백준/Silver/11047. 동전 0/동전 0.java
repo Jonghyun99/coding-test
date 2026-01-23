@@ -17,10 +17,8 @@
 
             int count = 0;
             for(int i=N-1; i>=0; i--) {
-                if(K >= A[i]) {
-                    count += K/A[i];
-                    K = K%A[i];
-                }
+                count += K/A[i];
+                K = K%A[i];
             }
             System.out.println(count);
 
