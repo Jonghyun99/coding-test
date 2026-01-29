@@ -1,80 +1,78 @@
-    import java.util.*;
-    import java.io.*;
+import java.util.*;
+import java.io.*;
 
-    class Main{
+class Main {
 
-        static int[] dist;
-        static int maxNode;
-        static int maxDist;
-        static boolean[] visited;
-        static ArrayList<Edge>[] edges;
+    // 입력: 에지의 번호와 에지의 가중치
+    static ArrayList<Edge>[] edgeList;
+    static int[] distance;
+    static int maxNode, maxDistance;
+    
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
+        int N = Integer.parseInt(st.nextToken());
+        edgeList = new ArrayList[N+1];
+        distance = new int[N+1];
 
-        public static void main(String[] args) throws IOException {
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            
-            int N = Integer.parseInt(st.nextToken());
-            
-            edges = new ArrayList[N+1];
-            for(int i=1; i<=N; i++){
-                edges[i] = new ArrayList<>();
-            }
-
-
-            for(int i=1; i<=N; i++) {
-                st = new StringTokenizer(br.readLine());
-                int s = Integer.parseInt(st.nextToken());
-                while(true){
-                    int e = Integer.parseInt(st.nextToken());
-                    if(e==-1) break;
-                    int v = Integer.parseInt(st.nextToken());
-
-                    edges[s].add(new Edge(e, v));
-                }
-            }
-            visited = new boolean[N+1];
-            dist = new int[N+1];
-            BFS(1);
-            visited = new boolean[N+1];
-            dist = new int[N+1];
-            BFS(maxNode);
-            System.out.println(maxDist);
+        for(int i=1; i<=N; i++) {
+            edgeList[i] = new ArrayList<>();
         }
 
-        static void BFS(int index) {
-            Queue<Integer> queue = new LinkedList<>();
-            queue.add(index);
-            visited[index] = true;
-
-            while(!queue.isEmpty()) {
-                int nowNode = queue.poll();
-
-                if(dist[nowNode] > maxDist) {
-                    maxDist =  dist[nowNode];
-                    maxNode = nowNode;
-                }
-
-                for(Edge edge:edges[nowNode]) {
-                    int e = edge.e;
-                    int v = edge.value;
-                    if(!visited[e]){
-                        queue.add(e);
-                        visited[e] = true;
-                        dist[e] = dist[nowNode] + v;
-                    }
-                }
+        for(int i=1; i<=N; i++){
+            st = new StringTokenizer(br.readLine());
+            int node = Integer.parseInt(st.nextToken());
+            while(true) {
+                int targetNode = Integer.parseInt(st.nextToken());
+                if(targetNode==-1) break;
+                int targetDistance = Integer.parseInt(st.nextToken());
+                edgeList[node].add(new Edge(targetNode, targetDistance));
             }
         }
-
+        maxNode = 0;
+        maxDistance = 0;
+        Arrays.fill(distance,-1);
+        BFS(1);
+        Arrays.fill(distance,-1);
+        BFS(maxNode);
+        System.out.println(maxDistance);
 
     }
-    class Edge {
-        int e;
-        int value;
 
-        Edge(int e, int value) {
-            this.e = e;
-            this.value = value;
+    static void BFS(int node) {
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(node);
+        distance[node] = 0;
+
+        while(!queue.isEmpty()) {
+            int nowNode = queue.poll();
+
+            if(maxDistance < distance[nowNode]) {
+                maxDistance = distance[nowNode];
+                maxNode = nowNode;
+                // break;
+            }
+
+            for(Edge nextEdge:edgeList[nowNode]) {
+                int nextTargetNode = nextEdge.targetNode;
+                int nextDistance = nextEdge.distance;
+                if(distance[nextTargetNode] == -1) {
+                    distance[nextTargetNode] = distance[nowNode] + nextDistance;
+                    queue.add(nextTargetNode);
+                }
+            }
         }
     }
+
+}
+
+class Edge {
+    int targetNode;
+    int distance;
+
+    Edge (int targetNode, int distance) {
+        this.targetNode = targetNode;
+        this.distance = distance;
+    }
+}
