@@ -1,28 +1,24 @@
-    import java.util.*;
-    import java.io.*;
+import java.util.*;
+import java.io.*;
 
-    class Main{
-        public static void main(String[] args) throws IOException {
-            Scanner sc = new Scanner(System.in);
-            int N = sc.nextInt();
+class Main {
 
-            PriorityQueue<Integer> queue = new PriorityQueue<>();
-            for(int i=0; i<N; i++){
-                queue.offer(sc.nextInt());
-            }
-            int data1 = 0;
-            int data2 = 0;
-            int cnt = 0;
+    public static void main(String[] args) throws IOException {
+        Scanner sc = new Scanner(System.in);
+        int N = sc.nextInt();
 
-            while(queue.size() >1) {
-                data1 = queue.remove();
-                data2 = queue.remove();
-                cnt += data1+data2;
-                queue.offer(data1+data2);
-            }
-            System.out.println(cnt);
-            
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        for(int i=0; i<N; i++){
+            pq.add(sc.nextInt());
         }
 
-
+        int sum=0;
+        while(pq.size()>1){
+            int card1 = pq.poll();
+            int card2 = pq.poll();
+            sum += card1+card2;
+            pq.add(card1+card2);
+        }
+        System.out.println(sum);
     }
+}
