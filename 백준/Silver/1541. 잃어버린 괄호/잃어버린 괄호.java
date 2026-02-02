@@ -3,31 +3,23 @@ import java.io.*;
 
 class Main {
 
-    static int answer = 0;
-
+    // 그리디 핵심 로직: 뺄셈의 뒤는 플..
+    // 100-40+50+74-30+29-45+43+11 ... -222
     public static void main(String[] args) throws IOException {
-        Scanner sc = new Scanner(System.in);
-        String example = sc.nextLine();
-        String[] str = example.split("-");
-        for(int i=0; i<str.length; i++) {
-            int temp = mySum(str[i]);
-
-            if(i==0){
-                answer += temp;
-            } else {
-                answer -= temp;
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String str = br.readLine();
+        String[] minusStrArray = str.split("-");
+        int sum = 0;
+        for(int i=0; i<minusStrArray.length; i++){
+            String[] minusStr = minusStrArray[i].split("[+]");
+            for(int j=0; j<minusStr.length; j++){
+                if(i==0){
+                    sum += Integer.parseInt(minusStr[j]);
+                } else {
+                    sum -= Integer.parseInt(minusStr[j]);
+                }
             }
         }
-        System.out.println(answer);
-
+        System.out.println(sum);
     }
-    static int mySum(String a) {
-        int sum = 0;
-        String temp[] = a.split("[+]");
-        for(int i=0; i<temp.length; i++) {
-            sum += Integer.parseInt(temp[i]);
-        }
-        return sum;
-    }
-
 }
