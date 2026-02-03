@@ -10,12 +10,12 @@ class Main {
         int limit = (int)Math.sqrt(B);
 
         boolean[] isPrime = new boolean[limit+1];
-        Arrays.fill(isPrime,true);
+        Arrays.fill(isPrime, true);
         isPrime[0] = false;
         isPrime[1] = false;
 
         for(int i=2; i<=Math.sqrt(limit); i++) {
-            if(isPrime[i]) {
+            if(isPrime[i]){
                 for(int j=i*i; j<=limit; j+=i) {
                     isPrime[j] = false;
                 }
@@ -23,12 +23,12 @@ class Main {
         }
 
         long cnt = 0;
-        for(int i=2; i<=limit; i++){
-            if(isPrime[i]) {
-                long temp = i;
+        for(int i=2; i<=limit; i++) {
+            if(isPrime[i]){
+                long temp=i;
                 while(temp<=B/i) {
-                    temp *= i;
-                    if(temp>=A) {
+                    temp*=i;
+                    if(temp>=A){
                         cnt++;
                     }
                 }
