@@ -32,18 +32,14 @@ class Main {
         
     }
 
-    // 이게 최선일까?
     static boolean isPalindromeNumber(int num) {
-        String strNum = String.valueOf(num);
-        // string을 한 문자열씩 split할 때 인자는??
-        StringBuilder sb = new StringBuilder();
-        char[] arr = strNum.toCharArray();
-        for(int i=arr.length-1; i>=0; i--){
-            sb.append(arr[i]-'0');
+        int reversed = 0;
+        int original = num;
+        while(num>0) {
+            reversed = reversed * 10 + (num%10);
+            num/=10;
         }
-        if(num == Integer.parseInt(sb.toString())) {
-            return true;
-        }
-        return false;
+
+        return original == reversed;
     }
 }
