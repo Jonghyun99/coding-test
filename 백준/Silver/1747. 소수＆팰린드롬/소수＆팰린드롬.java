@@ -1,45 +1,48 @@
-import java.util.*;
-import java.io.*;
+import java.util.Arrays;
+import java.util.Scanner;
 
-class Main {
-    public static void main(String[] args) throws IOException {
+public class Main {
 
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt();
-
-        boolean[] isPrime = new boolean[10000000+1];
-        Arrays.fill(isPrime, true);
+        int A = sc.nextInt();    
+        boolean[] isPrime = new boolean[2000001];
+        
+        Arrays.fill(isPrime,true);
         isPrime[0] = false;
         isPrime[1] = false;
 
-        for(int i=2; i*i<=10000000; i++) {
-            if(isPrime[i]){
-                for(int j=i*i; j<=10000000; j+=i) {
+        int sqrtB = (int)Math.sqrt(2000000);
+        for(int i=2; i<=sqrtB; i++){
+            if(isPrime[i]) {
+                for(int j=i*i; j<=2000000; j+=i) {
                     isPrime[j] = false;
                 }
             }
         }
 
-        for(int i=N; i<=10000000; i++){
-            if(isPrime[i]) {
-                if(isPalindromeNumber(i)){
-                    System.out.println(i);
-                    break;
-                }
+        for(int i=A; i<=2000000; i++) {
+            if(isPrime[i] && isPalindrome(i)) {
+                System.out.println(i);
+                break;
             }
         }
 
         
+
     }
 
-    static boolean isPalindromeNumber(int num) {
-        int reversed = 0;
-        int original = num;
-        while(num>0) {
-            reversed = reversed * 10 + (num%10);
-            num/=10;
+    static boolean isPalindrome(int num) {
+        int temp = num;
+        int checkNum = 0;
+        while(temp>0){
+            checkNum = (checkNum*10) + temp%10;
+            temp /= 10;
         }
-
-        return original == reversed;
+        if(checkNum==num) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
