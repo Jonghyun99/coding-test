@@ -12,64 +12,69 @@ import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class Main {
-    static ArrayList<Integer>[] roadInfo;
-    static int targetDistance;
-    static int cnt = 0;
-    static int[] distance;
+    static int[] distanceArray;
+    static ArrayList<Integer>[] roadArray;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
+
         int cityCount = Integer.parseInt(st.nextToken());
         int roadCount = Integer.parseInt(st.nextToken());
-        targetDistance = Integer.parseInt(st.nextToken());
-        int initCity = Integer.parseInt(st.nextToken());
-        
-        distance = new int[cityCount+1];
-        roadInfo = new ArrayList[cityCount+1];
-        for(int i=1; i<=cityCount; i++) {
-            roadInfo[i] = new ArrayList<>();
-            distance[i] = -1;
+        int targetDistance = Integer.parseInt(st.nextToken());
+        int departCity = Integer.parseInt(st.nextToken());
+
+        roadArray = new ArrayList[cityCount+1];
+        for(int i=1; i<=cityCount; i++){
+            roadArray[i] = new ArrayList<>();
         }
 
-        for(int i=0; i<roadCount; i++){
+        distanceArray = new int[cityCount+1];
+        Arrays.fill(distanceArray,-1);
+        distanceArray[departCity] = 0;
+        boolean found = false;
+        for(int i=0; i<roadCount; i++) {
             st = new StringTokenizer(br.readLine());
             int startCity = Integer.parseInt(st.nextToken());
             int endCity = Integer.parseInt(st.nextToken());
-            roadInfo[startCity].add(endCity);
-        }
-        
-        BFS(initCity,0);
-        StringBuilder sb = new StringBuilder();
-        boolean found = false;
-        for(int i=1; i<= cityCount; i++){
-            if(distance[i] == targetDistance){
-                sb.append(i).append("\n");
-                found = true;
-            }
+            roadArray[startCity].add(endCity);
         }
 
-        if(found) {
-            System.out.println(sb);
-        } else {
+        BFS(departCity);
+
+        int cnt = 0;
+        for(int i=1; i<=cityCount; i++){
+            if(distanceArray[i]==targetDistance){
+                System.out.println(i);
+                cnt++;
+            }
+        }
+        if(cnt==0) {
             System.out.println(-1);
         }
 
+        // BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        // for(int i=1; i<=cityCount; i++) {
+        //     if(distanceArray[i] == targetDistance){
+        //         bw.write(i);
+        //     }
+        // }
+        // bw.flush();
+        // bw.close();
     }
 
-    // startCity로부터 깊이가 K인 도시들을 탐색하므로.. BFS가 아닌 DFS 사용?
-    static void BFS(int currentCity, int deepth) {
+    static void BFS(int departCity) {
         Queue<Integer> queue = new ArrayDeque<>();
-        queue.add(currentCity);
-        distance[currentCity] = 0;
+        queue.add(departCity);
         while(!queue.isEmpty()) {
             int nowCity = queue.poll();
-            for(int nextCity:roadInfo[nowCity]) {
-                if(distance[nextCity] == -1){
-                    distance[nextCity] = distance[nowCity] + 1;
+            for(int nextCity:roadArray[nowCity]) {
+                if(distanceArray[nextCity] == -1) {
+                    distanceArray[nextCity] = distanceArray[nowCity] + 1;
                     queue.add(nextCity);
                 }
             }
+
         }
     }
 }
