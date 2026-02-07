@@ -1,9 +1,12 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Queue;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Main {
 
@@ -11,25 +14,22 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         long A = sc.nextLong();
         long B = sc.nextLong();
-
-        long result = gcd(A,B);
-        
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-
-        for(int i=0; i<result; i++){
-            bw.write("1");
+        long gcb = getGCB(A, B);
+        StringBuilder sb = new StringBuilder();
+        for(int i=0; i<gcb; i++){
+            sb.append(1);
         }
-        bw.flush();
-        bw.close();
+        System.out.println(sb);
+
+
     }
 
-    static long gcd(long a, long b){
-        while(b>0){
-            long temp = a%b;
-            a = b;
-            b = temp;
+    static long getGCB(long A, long B) {
+        while(B>0) {
+            long temp = A%B;
+            A = B;
+            B =  temp;
         }
-        return a;
+        return A;
     }
-        
 }
