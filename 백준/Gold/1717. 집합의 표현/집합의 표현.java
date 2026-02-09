@@ -11,47 +11,37 @@ public class Main {
         int N = sc.nextInt();
         int M = sc.nextInt();
         parent = new int[N+1];
-        for(int i=0; i<=N; i++){
+        for(int i = 1; i<=N; i++){
             parent[i] = i;
         }
 
-        for(int i=0; i<M; i++){
-            int question = sc.nextInt();
+        for(int i=0; i<M; i++) {
+            int q = sc.nextInt();
             int a = sc.nextInt();
             int b = sc.nextInt();
-            if(question == 0){
+            if(q==0){
                 union(a,b);
             } else {
-                if(checkSame(a,b)) {
+                if(find(a)==find(b)) {
                     System.out.println("YES");
                 } else {
                     System.out.println("NO");
                 }
             }
         }
+    }     
+
+    static int find(int a){
+        if(parent[a] == a) return a;
+        return parent[a] = find(parent[a]);
     }
 
     static void union(int a, int b) {
         a = find(a);
         b = find(b);
-        if(a!=b) {
+        if(a!=b){
             parent[b] = a;
         }
-    }
-
-    static int find(int a){
-        if(a==parent[a]) 
-            return a;        
-        else
-            return parent[a] = find(parent[a]); // 경로압축 부분.. 이해필요
-
-    }
-
-    static boolean checkSame(int a, int b){
-        a = find(a);
-        b = find(b);
-        if(a==b) return true;
-        return false;
     }
 
 }
