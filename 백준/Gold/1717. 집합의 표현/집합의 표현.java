@@ -48,7 +48,7 @@ public class Main {
         int rootA = find(a);
         int rootB = find(b);
         if(rootA != rootB){
-            parent[rootB] = rootA;
+            parent[rootA] = rootB;
             // 1 2 3 4 5 에서 union (1 3) 할 시 1이 3의 부모가 됨
             // parent[3] = 1이 나와야함
             // 고로 union(a,b)에서 parent[b] 할시 a가 나와야 하므로
