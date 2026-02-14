@@ -1,64 +1,76 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
-import javax.crypto.AEADBadTagException;
+class Status {
+    int a;
+    int b;
+
+    Status(int a, int b) {
+        this.a = a;
+        this.b = b;
+    }
+}
 
 public class Main {
 
-    static boolean[][] visited = new boolean[201][201];
-    static int[] limit = new int[3];
-    static int[] sender = { 0, 0, 1, 1, 2, 2 };
-    static int[] receiver = { 1, 2, 0, 2, 0, 1 };
+    static int limit[] = new int[3];
+    static int[] sender = {0,0,1,1,2,2};
+    static int[] receiver = {1,2,0,2,0,1};
     static ArrayList<Integer> answer = new ArrayList<>();
-
-    public static void main(String[] args) {
+    static boolean[][] visited = new boolean[201][201];    
+    public static void main(String[] args) throws IOException {
         Scanner sc = new Scanner(System.in);
-        // limit배열은 200칸까지 담아얗ㄴ다는 별도 표기가 없어도 되나?
         limit[0] = sc.nextInt();
         limit[1] = sc.nextInt();
         limit[2] = sc.nextInt();
 
-        BFS();
-
+        BFS(0,0);
         Collections.sort(answer);
-        for(int num:answer){
-            System.out.print(num + " ");
+        StringBuilder sb = new StringBuilder();
+        for(int num: answer) {
+            sb.append(num).append(" ");
         }
-
+        System.out.println(sb);
     }
 
-    static void BFS() {
-        Queue<int[]> q = new ArrayDeque<>();
-        q.add(new int[] {0 ,0});
-        visited[0][0] = true;
-        
+    static void BFS(int A, int B) {
+        Queue<Status> q = new ArrayDeque<>();
+        q.add(new Status(A, B));
+        visited[A][B] = true;
+
         while(!q.isEmpty()) {
-            int[] now = q.poll();
-            int nowA = now[0];
-            int nowB = now[1];
-            int nowC = limit[2] - nowA- nowB;
+            Status now = q.poll();
+            int a = now.a;
+            int b = now.b;
+            int c = limit[2] - a - b;
 
-            if(nowA==0) answer.add(nowC);
+            if(a==0) answer.add(c);
 
-            for(int i=0; i<6; i++) {
-                int[] next = {nowA, nowB, nowC};
-                int from = sender[i];
-                int to = receiver[i];
+            for(int i=0; i<6; i++){
+                int[] next = {a,b,c};
+                int to = sender[i];
+                int from = receiver[i];
 
-                int amount = Math.min(next[from], limit[to] - next[to]);
+                int amount = Math.min(next[from] , limit[to] - next[to]);
                 
                 next[to] += amount;
                 next[from] -= amount;
 
-                if(!visited[next[0]][next[1]]){
-                    visited[next[0]][next[1]] = true;
-                    q.add(new int[]{next[0], next[1]});
-                }
-            }  
-        }
-    }
+                if(visited[next[0]][next[1]]) continue;
 
+                visited[next[0]][next[1]] = true;
+                q.add(new Status(next[0], next[1]));
+            }
+        }
+        
+    }
 }
