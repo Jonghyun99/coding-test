@@ -3,65 +3,59 @@ import java.util.*;
 
 public class Main{
 
-    static ArrayList<Integer>[] friendGraph;
-
     static int N,M;
-    static int[] result;
+    static int[][] dist;
+    static int INF = 987654321;
+
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
 
-        friendGraph = new ArrayList[N+1];
-        result = new int[N+1];
-        for(int i=0; i<=N; i++) {
-            friendGraph[i] = new ArrayList<>();
+        dist = new int[N+1][N+1];
+
+        for(int i=1; i<=N; i++) {
+            for(int j=1; j<=N; j++) {
+                if(i==j) dist[i][j] = 0;
+                else dist[i][j] = INF;
+            }
         }
 
-        for(int i=0; i<M; i++) {
+        for(int i=0; i<M; i++){
             st = new StringTokenizer(br.readLine());
             int a = Integer.parseInt(st.nextToken());
             int b = Integer.parseInt(st.nextToken());
-            friendGraph[a].add(b);
-            friendGraph[b].add(a);
+            dist[a][b] = dist[b][a] = 1;
         }
 
-        int minKevinBacon = Integer.MAX_VALUE;
-        int resultPerson = - 1;
+        for(int k=1; k<=N; k++){
+            for(int i=1; i<=N; i++){
+                for(int j=1; j<=N; j++){
+                    dist[i][j] = Math.min(dist[i][j], dist[i][k] + dist[k][j]);
+                }
+            }
+        }
 
-        for(int i=1; i<=N; i++) {
-            int currentSum = BFS(i);
-            
-            if(currentSum < minKevinBacon) {
-                minKevinBacon = currentSum;
+        int minSum = INF;
+        int resultPerson = 1;
+
+        for(int i=1; i<=N; i++){
+            int sum = 0;
+            for(int j=1; j<=N; j++){
+                sum += dist[i][j];
+            }
+            if(minSum>sum) {
+                minSum = sum;
                 resultPerson = i;
             }
         }
 
         System.out.println(resultPerson);
-    }
 
-    static int BFS(int startFriend) {
-        Queue<Integer> q = new ArrayDeque<>();
-        int[] dist = new int[N+1];
-        q.add(startFriend);
-        Arrays.fill(dist, -1);
-        dist[startFriend] = 0;
-        int sum = 0;
 
-        while(!q.isEmpty()) {
-            int now = q.poll();
-            for(int next:friendGraph[now]) {
-                if(dist[next] == -1) {
-                    dist[next] = dist[now] + 1;
-                    sum += dist[next];
-                    q.add(next);
-                }
-            }
-        }
-        return sum;
+
     }
 }
