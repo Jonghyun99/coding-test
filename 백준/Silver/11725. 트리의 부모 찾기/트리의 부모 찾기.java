@@ -52,6 +52,7 @@ public class Main {
         visited[node] = true;
         for(int next:adj[node]) {
             if(!visited[next]) {
+                visited[next]= true;
                 parent[next] = node; // 핵심
                 dfs(next);
             }
