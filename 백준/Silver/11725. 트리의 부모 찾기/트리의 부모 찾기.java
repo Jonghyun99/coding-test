@@ -40,25 +40,20 @@ public class Main {
             adj[b].add(a);
         }
 
-        bfs(1);
+        dfs(1);
 
+        StringBuilder sb = new StringBuilder();
         for(int i=2; i<=N; i++)
-        System.out.println(parent[i]);
+            sb.append(parent[i]).append("\n");
+        System.out.println(sb);
     }
 
-    static void bfs(int start) {
-        Queue<Integer> q = new ArrayDeque<>();
-        q.add(start);
-        visited[start] = true;
-
-        while(!q.isEmpty()) {
-            int now = q.poll();
-            for(int next:adj[now]) {
-                if(!visited[next]) {
-                    visited[next] = true;
-                    parent[next] = now; // 핵심
-                    q.add(next);
-                }
+    static void dfs(int node) {
+        visited[node] = true;
+        for(int next:adj[node]) {
+            if(!visited[next]) {
+                parent[next] = node; // 핵심
+                dfs(next);
             }
         }
     }
