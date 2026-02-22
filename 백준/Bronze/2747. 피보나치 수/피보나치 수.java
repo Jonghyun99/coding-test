@@ -16,7 +16,15 @@ public class Main {
         }
         D[0] = 0;
         D[1] = 1;
-        fibo(N);
+
+        // 바텀업 방식
+        for(int i=2; i<=N; i++) {
+            D[i] = D[i-1] + D[i-2];
+        }
+        // 탑다운 방식
+        // fibo(N);
+
+
         System.out.println(D[N]);
     }
 
