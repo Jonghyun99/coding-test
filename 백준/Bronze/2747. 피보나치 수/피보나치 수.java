@@ -6,32 +6,22 @@ import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class Main {
-    static int[] A;
-    static int N;
+    static int[] D;
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        N = sc.nextInt();
-        A = new int[N+1];
-        
-        switch (N) {
-            case 0:
-                System.out.println(0);
-                return;
-            case 1:
-                System.out.println(1);
-                return;
+        int N = sc.nextInt();
+        D = new int[N+1];
+        for(int i=0; i<=N; i++) {
+            D[i] = -1;
         }
-
-        A[0] = 0;
-        A[1] = 1;
-        fibo(2);
-        System.out.println(A[N]);
+        D[0] = 0;
+        D[1] = 1;
+        fibo(N);
+        System.out.println(D[N]);
     }
 
-    // 0,1,1,2,3,5,8,13,21
-    static int fibo(int i) {
-        if(i==N) return A[i] = A[i-1] + A[i-2];
-        A[i] = A[i-1] + A[i-2];
-        return fibo(i+1);
+    static int fibo(int N){
+        if(D[N] != -1) return D[N]; // DP의 장점, 기존에 있는 해답은 추가적인 연산 없이 반환 가능
+        return D[N] = fibo(N-2) + fibo(N-1); 
     }
 }
