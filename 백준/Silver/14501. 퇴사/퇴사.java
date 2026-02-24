@@ -6,28 +6,42 @@ import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt();
 
-        int[] d = new int[N+2];
-        int[] t = new int[N+1];
-        int[] p = new int[N+1];
+    static int maxprofit, N;
+    static int[] t,p;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+
+        t = new int[N+1];
+        p = new int[N+1];
 
         for(int i=1; i<=N; i++){
-            t[i] = sc.nextInt();
-            p[i] = sc.nextInt();
+            st = new StringTokenizer(br.readLine());
+            t[i] = Integer.parseInt(st.nextToken());
+            p[i] = Integer.parseInt(st.nextToken());
         }
 
-        for(int i=1; i<=N; i++) {
-            d[i+1] = Math.max(d[i], d[i+1]);
+        dfs(1, 0);
 
-            int payDay = t[i]+i;
-            if(payDay<=N+1) {
-                d[payDay] = Math.max(d[payDay], d[i] + p[i]);
-            }
-        }
-        System.out.println(d[N+1]);
+        System.out.println(maxprofit);
         
+    }
+
+    static void dfs(int day, int profit) {
+        if(day>N+1) return;
+
+        if(day<=N+1) {
+            maxprofit = Math.max(profit,maxprofit);
+        }
+
+        if(day== N+1) return;
+
+
+        dfs(day + t[day], profit+p[day]);
+
+        dfs(day+1, profit);
+
     }
 }
