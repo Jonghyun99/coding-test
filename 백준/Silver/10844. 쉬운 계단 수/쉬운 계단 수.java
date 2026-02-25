@@ -9,27 +9,32 @@
             public static void main(String[] args) throws IOException {
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                 int N = Integer.parseInt(br.readLine());
-                long[][] D = new long[N+1][10];
                 long mod = 1000000000;
 
-                // D[i][j] = i길이의 숫자에서 j로 끝날 수 있는 경우의수
+                // prev[i], cur[i] 끝자리가 i인 값의 경우의수
+                long[] prev = new long[10];
+                long[] cur = new long[10];
+
                 for(int i=1; i<=9; i++) {
-                    D[1][i] = 1;
+                    prev[i] = 1;
                 }
 
                 for(int i=2; i<=N; i++){
-                    for(int j=0; j<=9; j++){
-                        if(j==0) D[i][j] = D[i-1][1];// 끝자리가 0이 될 수 있는 경우의수는 1인 경우
-                        else if(j==9) D[i][j] = D[i-1][8];
-                        else {
-                            D[i][j] = (D[i-1][j-1] + D[i-1][j+1]) % mod;
-                        }
+                    cur[0] = prev[1] % mod;
+                    cur[9] = prev[8] % mod;
+                    for(int j=1; j<=8; j++){
+                        cur[j] = (prev[j-1] + prev[j+1]) % mod;
+                        // 이부분 (prev[j-1] % mod + prev[j+1] % mod) % mod 랑
+                        // (prev[j-1] % mod + prev[j+1] % mod) 이거랑, 3개다 똑같은 결과지? 밑에껀 다른가
+                    }
+                    for(int j=0;j<=9; j++){
+                        prev[j] = cur[j];
                     }
                 }
 
                 long sum = 0;
                 for(int i=0; i<=9; i++){
-                    sum = (sum + D[N][i]) % mod;
+                    sum = (sum + prev[i]) % mod;
                 }
                 System.out.println(sum);
 
