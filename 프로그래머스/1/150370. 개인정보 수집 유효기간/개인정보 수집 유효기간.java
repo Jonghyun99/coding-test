@@ -2,47 +2,37 @@ import java.util.*;
 import java.io.*;
 
 class Solution {
-    // terms
     public int[] solution(String today, String[] terms, String[] privacies) {
         
-        String[] termArray = new String[terms.length];
-        int[] duration = new int[terms.length];
-        
-        Map<String,Integer> termMap = new HashMap<String,Integer>();
-        for(int i=0; i<terms.length; i++){
-            StringTokenizer st = new StringTokenizer(terms[i]);
-            termMap.put(st.nextToken(), Integer.parseInt(st.nextToken()) * 28);
+        Map<String, Integer> tm = new HashMap<>();
+        for(String str:terms){
+            StringTokenizer st = new StringTokenizer(str);
+            tm.put(st.nextToken(), Integer.parseInt(st.nextToken()));
         }
         
-        String[] todaySplit = today.split("\\.");
-        int todayYear = Integer.parseInt(todaySplit[0]);
-        int todayMonth = Integer.parseInt(todaySplit[1]);
-        int todayDay = Integer.parseInt(todaySplit[2]);
-        
-        int totalToDay = (todayYear * 12 * 28) + (todayMonth*28) + todayDay;
-        // int[] answer = new int[terms.length+1];
-        List<Integer> answer = new ArrayList<>();
-        StringBuilder sb = new StringBuilder();
-        for(int i=0; i<privacies.length; i++) {
-            String[] privaciesStr = privacies[i].split(" ");
-            String[] privaciesSplit = privaciesStr[0].split("\\.");
-            String termsType = privaciesStr[1];
+        int totalToday = dateTodayInt(today);
+        List<Integer> list = new ArrayList<>();
+        for(int i=0; i<privacies.length; i++){
+            String[] prStr = privacies[i].split(" ");
+            String prDate = prStr[0];
+            String prTerm = prStr[1];
             
-            int privaciesYear = Integer.parseInt(privaciesSplit[0]);
-            int privaciesMonth = Integer.parseInt(privaciesSplit[1]);
-            int privaciesDay = Integer.parseInt(privaciesSplit[2]);
-            int privaciesTotalDay = (12*28*privaciesYear) + (28*privaciesMonth) + privaciesDay;
+            int totalPrDay = dateTodayInt(prDate);
+            totalPrDay+=tm.get(prTerm)*28;
             
-            privaciesTotalDay += termMap.get(termsType);
-            
-            System.out.println("privaciesTotalDay: " + privaciesTotalDay + ", totalToday: " + totalToDay);            
-            if(privaciesTotalDay <= totalToDay) {
-                answer.add(i+1);
+            // 파기해야할 번호를 담아야한다 -> totalToday가 높아야한다 
+            // 유효기간이 25.01.05일 때, 오늘 날짜가 01.05이면 파기 x
+            if(totalToday>=totalPrDay) {
+                list.add(i+1);
             }
         }
-        // for(int n:answer){
-        //     System.out.println("answer: " +n);
-        // }       
-        return answer.stream().mapToInt(Integer::intValue).toArray();
+        return list.stream().mapToInt(Integer::intValue).toArray();
+    }
+    static int dateTodayInt(String date){
+        String[] arr = date.split("\\.");
+        int year = Integer.parseInt(arr[0])*28*12;
+        int month = Integer.parseInt(arr[1])*28;
+        int day = Integer.parseInt(arr[2]);
+        return year + month + day;
     }
 }
