@@ -2,18 +2,16 @@ class Solution {
     public int solution(String s) {
         int answer = 0;
         
-        char x = ' ';
         int xCount = 0;
         int otherCount = 0;
+        char x = s.charAt(0);
         
         for(int i=0; i<s.length(); i++) {
-            char c = s.charAt(i);
-            
-            if(xCount == 0 && otherCount == 0){
-                x=c;
+            if(xCount==0 && otherCount==0){
+                x = s.charAt(i);
             }
             
-            if(x==c) {
+            if(s.charAt(i) == x){
                 xCount++;
             } else {
                 otherCount++;
@@ -24,9 +22,13 @@ class Solution {
                 xCount=0;
                 otherCount=0;
             }
+            
         }
         
-        if(xCount!=0||otherCount!=0) answer++;
+        if(xCount>0||otherCount>0) {
+            answer++;
+        }
+        
         
         return answer;
     }
