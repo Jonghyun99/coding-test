@@ -1,21 +1,18 @@
-import java.util.*;
-
 class Solution {
     public int solution(String s) {
-        int  answer = 0;
+        int answer = 0;
         
-        char x = ' '; //기준글자
-        int xCount = 0; // 기준글자 카운트
-        int otherCount = 0; // 다른 글자 카운트
+        char x = ' ';
+        int xCount = 0;
+        int otherCount = 0;
         
-        for(int i =0; i<s.length(); i++){
+        for(int i=0; i<s.length(); i++) {
             char c = s.charAt(i);
             
-            if(xCount==0 && otherCount == 0){
+            if(xCount == 0 && otherCount == 0){
                 x=c;
-                xCount++;
-                continue;
             }
+            
             if(x==c) {
                 xCount++;
             } else {
@@ -29,10 +26,7 @@ class Solution {
             }
         }
         
-        if(xCount !=0 || otherCount!=0) {
-            answer++;
-        }
-        
+        if(xCount!=0||otherCount!=0) answer++;
         
         return answer;
     }
