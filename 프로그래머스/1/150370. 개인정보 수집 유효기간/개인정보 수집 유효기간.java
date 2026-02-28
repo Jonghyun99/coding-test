@@ -1,38 +1,45 @@
 import java.util.*;
-import java.io.*;
 
 class Solution {
     public int[] solution(String today, String[] terms, String[] privacies) {
+        List<Integer> answer = new ArrayList<>();
         
-        Map<String, Integer> tm = new HashMap<>();
-        for(String str:terms){
-            StringTokenizer st = new StringTokenizer(str);
-            tm.put(st.nextToken(), Integer.parseInt(st.nextToken()));
+        Map<String,Integer> map = new HashMap<>();
+        // 배열은 length, 문자열은 length(), 리스트는 .sized() 맞나? 다른거 더없었지?
+        for(int i=0; i<terms.length; i++){
+            String[] termStr = terms[i].split(" ");
+            map.put(termStr[0], Integer.parseInt(termStr[1]));
         }
         
-        int totalToday = dateTodayInt(today);
-        List<Integer> list = new ArrayList<>();
-        for(int i=0; i<privacies.length; i++){
-            String[] prStr = privacies[i].split(" ");
-            String prDate = prStr[0];
-            String prTerm = prStr[1];
+        int totalToday = getDay(today);
+        
+        for(int i=0; i<privacies.length; i++) {
+            String[] privStr = privacies[i].split(" ");
+            int privDay = getDay(privStr[0]);
+
+            String condition = privStr[1];
+            int monthForAdd = map.get(condition) * 28;
             
-            int totalPrDay = dateTodayInt(prDate);
-            totalPrDay+=tm.get(prTerm)*28;
+            privDay += monthForAdd;
             
-            // 파기해야할 번호를 담아야한다 -> totalToday가 높아야한다 
-            // 유효기간이 25.01.05일 때, 오늘 날짜가 01.05이면 파기 x
-            if(totalToday>=totalPrDay) {
-                list.add(i+1);
+            // 이거 왜 <= 이지? < 아닌가? 파기 일이 5.10일인데 오늘 날짜가 5.11일이면 아직 파기 안하는거잖아
+            // 이걸 식으로 표현하면 privDay<totalDay 일 경우 파기안함
+            // 오늘날짜가 5.10일 때도 파기 안하는거잖아 privDay==totalDay
+            // 오늘날짜가 5.9이면 파기 해야지 priv>totalDay이니까
+            // 그니까 priv>totalDay 일때만 answer.add(i+1) 을 해야하는거 아닌가? 왜 반대지
+            if(privDay<=totalToday) {
+                answer.add(i+1);
             }
         }
-        return list.stream().mapToInt(Integer::intValue).toArray();
+        return answer.stream().mapToInt(Integer::intValue).toArray();
     }
-    static int dateTodayInt(String date){
-        String[] arr = date.split("\\.");
-        int year = Integer.parseInt(arr[0])*28*12;
-        int month = Integer.parseInt(arr[1])*28;
-        int day = Integer.parseInt(arr[2]);
-        return year + month + day;
+    
+    static int getDay(String date) {
+        String[] str = date.split("\\.");
+        int year = Integer.parseInt(str[0]) * 12 * 28;
+        int month = Integer.parseInt(str[1]) * 28;
+        int day = Integer.parseInt(str[2]);
+        
+        return year+month+day;
     }
 }
