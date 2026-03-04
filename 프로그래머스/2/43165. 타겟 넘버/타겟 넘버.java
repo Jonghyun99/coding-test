@@ -1,14 +1,16 @@
 class Solution {
     public int solution(int[] numbers, int target) {
-        return dfs(numbers, target, 0, 0);
+        return dfs(0, 0, numbers, target);
     }
     
-    static int dfs(int[] numbers, int target, int index, int currentSum) {
+    static int dfs(int index,int currentSum, int[] numbers, int target) {
         if(index == numbers.length) {
-            return (currentSum == target) ? 1 : 0;
+            if(currentSum==target) {
+                return 1;
+            }
+            return 0;
         }
-        
-        return dfs(numbers, target, index+1, currentSum + numbers[index])
-            + dfs(numbers, target, index+1, currentSum - numbers[index]);
+            
+        return dfs(index+1, currentSum+numbers[index], numbers, target) + dfs(index+1, currentSum-numbers[index], numbers, target);
     }
 }
