@@ -2,29 +2,29 @@ class Solution {
     public int solution(int n, int[] lost, int[] reserve) {
         int answer = n;
         
-        int[] student = new int[n+2];
+        int[] students = new int[n+2];
         
-        for(int r:reserve) {
-            student[r]++;
+        for(int a:reserve){
+            students[a]++;
         }
         
-        for(int l:lost) {
-            student[l]--;
+        for(int a:lost) {
+            students[a]--;
         }
-        
-        for(int i=1; i<=n; i++){
-            if(student[i]== -1) {
-                if(student[i-1] == 1) {
-                    student[i-1]--;
-                    student[i]++;
-                } else if (student[i+1] == 1) {
-                    student[i+1]--;
-                    student[i]++;
+        for(int i=1; i<=n; i++) {
+            if(students[i] == -1) {
+                if(students[i-1] == 1) {
+                    students[i]++;
+                    students[i-1]--;
+                } else if(students[i+1] == 1) {
+                    students[i]++;
+                    students[i+1]--;
                 } else {
                     answer--;
-                } 
+                }
             }
         }
+        
         return answer;
     }
 }
