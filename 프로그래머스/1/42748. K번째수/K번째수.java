@@ -2,19 +2,20 @@ import java.util.*;
 class Solution {
     public int[] solution(int[] array, int[][] commands) {
         int[] answer = new int[commands.length];
-        
-        int cmdIdx = 0;
+        int answerIdx=0;
         for(int[] command:commands) {
-            int start = command[0];
-            int end = command[1];
-            int targetNum = command[2]-1;
-            List<Integer> tempList = new ArrayList<>();
-            for(int i=start-1; i<end; i++) {
-                tempList.add(array[i]);
+            int s = command[0]-1;
+            int e = command[1];
+            int t = command[2];
+            
+            int[] a = new int[e-s]; 
+            int idx = 0;
+            for(int i = s; i<e; i++) {
+                a[idx++] = array[i];
             }
-            Collections.sort(tempList);
-            answer[cmdIdx++] = tempList.get(targetNum);
-        }
+            Arrays.sort(a);
+            answer[answerIdx++] = a[t-1];
+        }        
         
         return answer;
     }
