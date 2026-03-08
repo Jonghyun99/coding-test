@@ -24,14 +24,14 @@ public class Main {
         LocalDate endDate = LocalDate.of(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()),
                 Integer.parseInt(st.nextToken()));
 
-        long year = ChronoUnit.YEARS.between(startDate, endDate);
-        long day = ChronoUnit.DAYS.between(startDate, endDate);
-
-        if (year >= 1000) {
+        LocalDate limitDate = startDate.plusYears(1000);
+        if(!endDate.isBefore(limitDate)){
             System.out.println("gg");
         } else {
-            System.out.println("D-" + day);
+            long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
+            System.out.println("D-" + daysBetween);
         }
+
 
     }
 }
