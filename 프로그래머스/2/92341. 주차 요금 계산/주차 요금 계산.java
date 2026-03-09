@@ -1,68 +1,62 @@
 import java.util.*;
+
 class Solution {
     public int[] solution(int[] fees, String[] records) {
-        List<Integer> answerList = new ArrayList<>();
+        Map<String, Integer> parkStatusMap = new HashMap<>();
+        Map<String, Integer> timeMap = new TreeMap<>();
         
+        // 시간계산
+        for(String record:records) {
+            String[] parkInfo = record.split(" ");
+            int time = getTime(parkInfo[0]);
+            String carNumber = parkInfo[1];
+            String action = parkInfo[2];
+            
+            if(action.equals("IN")) {
+                parkStatusMap.put(carNumber, time);
+            } else {
+                int inTime = parkStatusMap.remove(carNumber);
+                int spendingTime = time - inTime;
+                timeMap.put(carNumber,timeMap.getOrDefault(carNumber,0) + spendingTime);
+            }
+        }
+        
+        // 출차 찍히지 않은 시간 계산
+        int lastTime = 23*60 + 59;
+        for(String leftCarNumber:parkStatusMap.keySet()) {
+            int inTime = parkStatusMap.get(leftCarNumber);
+            int spendingTime = lastTime - inTime;
+            timeMap.put(leftCarNumber,timeMap.getOrDefault(leftCarNumber,0) + spendingTime);
+        }
+        
+        // 요금계산
         int basicTime = fees[0];
         int basicPrice = fees[1];
         int unitTime = fees[2];
         int unitPrice = fees[3];
-        
-        Map<String, Integer> recordMap = new HashMap<>();
-        Map<String, Integer> carMap = new TreeMap<>();
-        for(String record:records) {
-            StringTokenizer st = new StringTokenizer(record);
-            String[] recordTimeStr = st.nextToken().split(":");
-            int recordTime = Integer.parseInt(recordTimeStr[0]) * 60 + Integer.parseInt(recordTimeStr[1]);
-            String carNumber = st.nextToken();
-            String action = st.nextToken();
+
+        List<Integer> list = new ArrayList<>();
+        for(Map.Entry<String, Integer> entry:timeMap.entrySet()){
+            String carNumber = entry.getKey();
+            int spendingTime = entry.getValue();
             
-            if("IN".equals(action)) {
-                recordMap.put(carNumber, recordTime);
+            // 기본 시간보다 적게 체류한 경우
+            if(spendingTime <= basicTime) {
+                list.add(basicPrice);
             } else {
-                int inTime = recordMap.get(carNumber);
-                int spendingTime = recordTime - inTime;
-                recordMap.remove(carNumber);
-                
-                carMap.put(carNumber, carMap.getOrDefault(carNumber,0) + spendingTime);
+                // 기본 시간보다 많이 체류한 경우
+                int totalPrice = basicPrice;
+                totalPrice += ((spendingTime - basicTime) + unitTime - 1) / unitTime * unitPrice;
+                list.add(totalPrice);
             }
-            
-        }
-        // 만약 남아있는 차가 있다면, 23:59에 출차로 간주
-        int endTime = 23*60 + 59;
-        for(String carNumber:recordMap.keySet()) {
-            int inTime = recordMap.get(carNumber);
-            int spendingTime = endTime - inTime;
-            carMap.put(carNumber, carMap.getOrDefault(carNumber,0) + spendingTime);
         }
         
-        for(String key : carMap.keySet()) {
-            System.out.printf("carNumber: %s, spendingTime: %d \n",key, carMap.get(key));
-            int totalSpendingTime = carMap.get(key);
-            answerList.add(getTotalPrice(totalSpendingTime, basicTime, basicPrice, unitPrice, unitTime));
-        }
-            
-        
-        return answerList.stream().mapToInt(Integer::intValue).toArray();
-    }
-    
-    static int getTotalPrice(int spendingTime, int basicTime, int basicPrice, int unitPrice, int unitTime) {
-        int totalPrice = basicPrice;
-        
-        if(spendingTime<=basicTime) {
-            return totalPrice;
-        }
-        
-        int overTime = spendingTime - basicTime;
-        
-        // 나눗셈할 때 1안넘으면 자동으로 올림처리 되던가? -> 안되는걸로 확인 
-        totalPrice += (overTime/unitTime) * unitPrice;
-        
-        if(overTime%unitTime > 0)
-        totalPrice += unitPrice;
-        
-        return totalPrice;
+        return list.stream().mapToInt(Integer::intValue).toArray();
     }
     
     
+    static int getTime(String time) {
+        String[] str = time.split(":");
+        return Integer.parseInt(str[0])*60 + Integer.parseInt(str[1]);
+    }
 }
