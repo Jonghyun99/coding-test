@@ -1,52 +1,51 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+import java.time.*;
+import java.time.format.*;
+import java.time.temporal.*;
 
+public class Main {
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
-
-public class Main{
-
+    static ArrayList<Integer>[] adjList;
     static boolean[] visited;
-    public static void main(String[] args) throws NumberFormatException, IOException {
+    static int N,M;
+    static int answer=0;
+
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(st.nextToken());
-        int m = Integer.parseInt(st.nextToken());
-        ArrayList<Integer>[] A = new ArrayList[n+1];
-        visited = new boolean[n+1];
-        for(int i=1; i<n+1; i++){
-            A[i] = new ArrayList<Integer>();
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        adjList = new ArrayList[N+1];
+        visited = new boolean[N+1];
+        for(int i=1; i<=N; i++) {
+            adjList[i] = new ArrayList<>();
         }
-        for(int i=0; i< m; i++){
+
+        for(int i=0; i<M; i++) {
             st = new StringTokenizer(br.readLine());
             int s = Integer.parseInt(st.nextToken());
             int e = Integer.parseInt(st.nextToken());
-            A[s].add(e);
-            A[e].add(s);
+            adjList[s].add(e);
+            adjList[e].add(s);
         }
-        int count = 0;
-        for (int i=1; i< n+1; i++) {
+
+        for(int i=1; i<=N; i++){
             if(!visited[i]) {
-                count++;
-                DFS(A, i);
+                answer++;
+                dfs(i);
             }
         }
-        System.out.println(count);
+        System.out.println(answer);
     }
-
-
-    public static void DFS(ArrayList<Integer>[] A, int v){
-        if(visited[v]){
-            return;
-        }
-        visited[v] = true;
-        for (int i:A[v]) {
-            if(visited[i] == false) {
-                DFS(A, i);
+    static void dfs(int node) {
+        visited[node] = true;
+        for(int next:adjList[node]) {
+            if(!visited[next]) {
+                dfs(next);
             }
         }
     }
-
-    
-       
 }
