@@ -1,37 +1,33 @@
 import java.util.*;
-
 class Solution {
-    
-    static HashSet<Integer> primeSet = new HashSet<>();
-    
     public int solution(String numbers) {
         boolean[] visited = new boolean[numbers.length()];
-        dfs("",numbers, visited);
+        Set<Integer> set = new HashSet<>();
+        dfs("", numbers, visited, set);
         
-        return primeSet.size();
+        return set.size();
     }
     
-    static void dfs(String current, String numbers, boolean[] visited) {
-        if(!current.equals("")) {
-            int num = Integer.parseInt(current);
-            if(isPrime(num)) {
-                primeSet.add(num);
+    static void dfs(String current, String numbers, boolean[] visited, Set<Integer> set) {
+        if(!current.isEmpty()){
+            if(isPrime(Integer.parseInt(current))) {
+                set.add(Integer.parseInt(current));
             }
         }
         
         for(int i=0; i<numbers.length(); i++) {
             if(!visited[i]) {
                 visited[i] = true;
-                dfs(current + numbers.charAt(i), numbers, visited);
+                dfs(current+numbers.charAt(i),numbers,visited, set);
                 visited[i] = false;
             }
         }
+        
     }
     
-    
     static boolean isPrime(int n) {
-        if(n==1 || n==0) return false;
-        for(int i=2;i<=Math.sqrt(n); i++) {
+        if(n==1||n==0) return false;
+        for(int i=2; i<=Math.sqrt(n); i++) {
             if(n%i==0) return false;
         }
         return true;
